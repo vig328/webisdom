@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import { Link } from "react-router-dom"; 
 import { Button } from "@/components/ui/button";
@@ -112,35 +113,36 @@ const Products = () => {
     : [filter];
 
   return (
-    <div className="min-h-screen bg-[#020617] text-white selection:bg-primary/30 relative">
+    <div className="min-h-screen bg-[#020617] text-white selection:bg-primary/30 relative overflow-x-hidden">
       
-      {/* 1. DYNAMIC AI BACKGROUND (NEURAL NETWORK) */}
-      <div 
-        className="fixed inset-0 z-0 opacity-60 transition-opacity duration-1000"
-        style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=2000&auto=format&fit=crop')`, // Cybernetic Neural Network
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      />
-      
-      {/* Darkened Overlays for readability */}
-      <div className="fixed inset-0 z-0 bg-gradient-to-b from-[#020617]/80 via-transparent to-[#020617]/90 pointer-events-none" />
-      <div className="fixed inset-0 z-0 bg-[#020617]/20 pointer-events-none" />
-
-      {/* 2. PARTICLES EFFECT (The moving lines following the cursor) */}
-      <ParticlesBackground />
-
+      {/* HEADER IS OUTSIDE MAIN TO OVERLAY PROPERLY */}
       <Header />
       
-      {/* VERTICAL GLOW LINE */}
+      {/* VERTICAL GLOW LINE - GLOBAL POSITIONED */}
       <div className="fixed left-1/2 top-0 w-[1px] h-full bg-gradient-to-b from-transparent via-blue-500/40 to-transparent -translate-x-1/2 z-1 pointer-events-none" />
 
-      <main className="relative z-10">
+      <main className="relative">
         
-        {/* Hero Section */}
-        <section className="pt-48 pb-32 text-center relative overflow-hidden">
-          <div className="container mx-auto px-4 max-w-4xl relative">
+        {/* Hero Section - PARTICLES TRAPPED HERE */}
+        <section className="relative pt-48 pb-32 text-center overflow-hidden min-h-[80vh] flex items-center justify-center">
+          
+          {/* 1. BACKGROUND LAYERS (TRAPPED) */}
+          <div className="absolute inset-0 z-0">
+             {/* Dynamic Neural Network Image */}
+             <div 
+                className="absolute inset-0 opacity-40 bg-center bg-cover"
+                style={{ backgroundImage: `url('https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=2000&auto=format&fit=crop')` }}
+             />
+             {/* Particles Effect Only for Hero */}
+             <div className="absolute inset-0 pointer-events-none">
+                <ParticlesBackground />
+             </div>
+             {/* Overlays for Hero Readability */}
+             <div className="absolute inset-0 bg-gradient-to-b from-[#020617]/80 via-transparent to-[#020617] pointer-events-none" />
+          </div>
+
+          {/* 2. HERO CONTENT */}
+          <div className="container mx-auto px-4 max-w-4xl relative z-10">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -171,8 +173,8 @@ const Products = () => {
           </div>
         </section>
 
-        {/* Content Section */}
-        <section className="py-24 relative" id="product-tour">
+        {/* Catalog Section - PLAIN BACKGROUND (Dark Navy) */}
+        <section className="py-24 relative bg-[#020617] z-10" id="product-tour">
           <div className="container mx-auto px-4">
             
             <Tabs defaultValue="products" className="w-full">
@@ -272,7 +274,7 @@ const Products = () => {
         </section>
 
         {/* Call to Action */}
-        <section className="py-32 relative overflow-hidden">
+        <section className="py-32 relative overflow-hidden bg-[#020617]">
           <div className="container mx-auto px-4 relative z-10 text-center max-w-3xl">
             <h2 className="text-5xl font-bold mb-8 tracking-tighter drop-shadow-2xl">Ready to Deploy?</h2>
             <p className="text-xl text-white/90 mb-12 drop-shadow-md">
