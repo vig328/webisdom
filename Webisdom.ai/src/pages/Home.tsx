@@ -7,21 +7,18 @@ import AIAuditSection from "@/components/sections/AIAuditSection";
 import NewsletterSection from "@/components/sections/NewsletterSection";
 import ProcessSection from "@/components/sections/ProcessSection";
 import FeaturesSection from "@/components/sections/FeaturesSection";
-import ParticlesBackground from "@/components/visuals/ParticlesBackground";
 
 const Home = () => {
   return (
-    // We use bg-black to make the white lines pop
-    <div className="min-h-screen bg-black relative overflow-hidden">
+    <div className="min-h-screen bg-black relative overflow-x-hidden">
       
-      {/* 1. The Particle Layer */}
-      <ParticlesBackground />
-
-      {/* 2. The Content Layer */}
+      {/* The Content Layer */}
       <div className="relative z-10">
         <Header />
         <main>
+          {/* Particles are now isolated inside HeroSection only */}
           <HeroSection />
+          
           <ProductShowcase />
           <IndustriesSection />
           <AIAuditSection />
