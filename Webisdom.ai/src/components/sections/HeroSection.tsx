@@ -1,8 +1,10 @@
+"use client";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { DemoRequestDialog } from "@/components/forms/DemoRequestDialog";
 import { AuditRequestDialog } from "@/components/forms/AuditRequestDialog";
+import ParticlesBackground from "@/components/visuals/ParticlesBackground";
 
 const HeroSection = () => {
   const [currentTagline, setCurrentTagline] = useState(0);
@@ -26,17 +28,20 @@ const HeroSection = () => {
   }, [taglines.length]);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* MODIFIED BACKGROUND: 
-          Removed 'bg-gradient-animate' and solid gradients to ensure 
-          the ParticlesBackground (z-0) is visible behind the text.
-      */}
-      <div className="absolute inset-0 bg-transparent" />
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
       
-      {/* Decorative Glows (Lower opacity so they don't hide the lines) */}
-      <div className="absolute top-20 right-20 w-72 h-72 bg-accent/10 rounded-full blur-[120px] animate-float" />
-      <div className="absolute bottom-20 left-20 w-96 h-96 bg-primary/10 rounded-full blur-[120px] animate-float" style={{ animationDelay: "2s" }} />
+      {/* 1. BACKGROUND LAYER: Particles isolated to Hero only */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <ParticlesBackground />
+        {/* Subtle overlay to ensure text readability */}
+        <div className="absolute inset-0 bg-black/20" />
+      </div>
       
+      {/* 2. DECORATIVE LAYER: Glows */}
+      <div className="absolute top-20 right-20 w-72 h-72 bg-accent/10 rounded-full blur-[120px] animate-float z-0" />
+      <div className="absolute bottom-20 left-20 w-96 h-96 bg-primary/10 rounded-full blur-[120px] animate-float z-0" style={{ animationDelay: "2s" }} />
+      
+      {/* 3. CONTENT LAYER */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-4xl mx-auto">
           {/* Badge */}
@@ -45,8 +50,8 @@ const HeroSection = () => {
             <span className="text-sm font-medium text-accent">AI Solutions for Enterprise</span>
           </div>
 
-          {/* Main Headline */}
-          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold mb-6 leading-tight">
+          {/* Main Headline - Flex centered to prevent jumping */}
+          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold mb-6 leading-tight min-h-[1.2em] lg:min-h-[2.4em] flex items-center justify-center">
             <span 
               key={currentTagline}
               className="block text-gradient animate-fade-in"
@@ -87,7 +92,7 @@ const HeroSection = () => {
       </div>
 
       {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce z-10">
         <div className="w-6 h-10 border-2 border-muted-foreground/20 rounded-full flex justify-center">
           <div className="w-1 h-3 bg-muted-foreground/40 rounded-full mt-2 animate-pulse" />
         </div>
