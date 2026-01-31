@@ -6,7 +6,6 @@ import { loadSlim } from "@tsparticles/slim";
 const ParticlesBackground = () => {
   const [init, setInit] = useState(false);
 
-  // Initialize the engine once
   useEffect(() => {
     initParticlesEngine(async (engine) => {
       await loadSlim(engine);
@@ -16,13 +15,14 @@ const ParticlesBackground = () => {
   }, []);
 
   const options = useMemo(() => ({
-    fullScreen: { enable: true, zIndex: 0 },
+    // This MUST be false to stay inside the Hero section
+    fullScreen: { enable: false }, 
     fpsLimit: 120,
     interactivity: {
       events: {
         onHover: {
           enable: true,
-          mode: "grab", // This draws lines to your cursor
+          mode: "grab",
         },
         onClick: {
           enable: true,
@@ -56,7 +56,7 @@ const ParticlesBackground = () => {
       },
       number: {
         density: { enable: true, area: 800 },
-        value: 100, // Adjust density for more/fewer lines
+        value: 100,
       },
       opacity: { value: 0.5 },
       shape: { type: "circle" },
@@ -67,7 +67,13 @@ const ParticlesBackground = () => {
 
   if (!init) return null;
 
-  return <Particles id="tsparticles" options={options as any} />;
+  return (
+    <Particles 
+      id="tsparticles" 
+      className="h-full w-full" 
+      options={options as any} 
+    />
+  );
 };
 
 export default ParticlesBackground;
