@@ -1,9 +1,11 @@
+"use client";
 import React, { useEffect } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { useNavigate } from "react-router-dom";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { motion } from "framer-motion";
 import { 
   Hotel, Heart, Building2, ShoppingBag, GraduationCap, 
   Home, Factory, Truck, Gavel, Cpu, Wheat, TrendingUp, Sparkles, ArrowRight 
@@ -35,56 +37,69 @@ const Industries = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const handleCardClick = (id) => {
+  const handleCardClick = (id: string) => {
     navigate(`/industry/${id}`);
   };
 
   return (
     <div className="min-h-screen bg-[#020617] text-white selection:bg-primary/30 relative overflow-x-hidden">
       
-      {/* 1. LAYERED BACKGROUND IMAGE (Neural Network Mesh) */}
-      <div 
-        className="fixed inset-0 z-0 opacity-40 transition-opacity duration-1000"
-        style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=2000&auto=format&fit=crop')`, 
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          filter: 'brightness(0.4) contrast(1.1)'
-        }}
-      />
-      
-      {/* 2. GIANT "AI" BACKGROUND TEXT (From your screenshots) */}
-      <div className="fixed inset-0 z-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
-        <span className="text-[40vw] font-black text-white/[0.03] leading-none tracking-tighter">
-          AI
-        </span>
-      </div>
-
-      {/* 3. GRADIENT OVERLAYS */}
-      <div className="fixed inset-0 z-0 bg-gradient-to-b from-[#020617] via-transparent to-[#020617] pointer-events-none" />
-      <div className="fixed inset-0 z-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_#020617_90%)] pointer-events-none" />
-
-      {/* 4. PARTICLES EFFECT */}
-      <ParticlesBackground />
-
       <Header />
       
-      <main className="relative z-10">
-        <section className="pt-48 pb-32 text-center relative overflow-hidden">
-          <div className="container mx-auto px-4 max-w-4xl relative">
-            <Badge variant="outline" className="mb-6 border-primary/40 text-primary uppercase tracking-[0.2em] py-2 px-6 bg-primary/10 backdrop-blur-md">
-              <Sparkles className="w-4 h-4 mr-2" /> Sectors We Transform
-            </Badge>
-            <h1 className="text-6xl md:text-8xl font-bold mb-8 tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-white to-white/40">
-              Our <span className="text-primary">Industries</span>
-            </h1>
-            <p className="text-xl text-white/50 max-w-2xl mx-auto leading-relaxed">
-              Select an industry to explore tailored AI solutions engineered for the enterprise.
-            </p>
+      <main className="relative">
+        {/* HERO SECTION - Particles and Large Text restricted here */}
+        <section className="relative pt-48 pb-32 text-center overflow-hidden min-h-[70vh] flex items-center">
+          
+          {/* 1. BACKGROUND LAYERS (TRAPPED IN HERO) */}
+          <div className="absolute inset-0 z-0">
+            {/* Neural Network Image */}
+            <div 
+              className="absolute inset-0 opacity-30 bg-center bg-cover"
+              style={{
+                backgroundImage: `url('https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=2000&auto=format&fit=crop')`, 
+                filter: 'brightness(0.4) contrast(1.1)'
+              }}
+            />
+            
+            {/* GIANT "AI" BACKGROUND TEXT */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
+              <span className="text-[40vw] font-black text-white/[0.03] leading-none tracking-tighter">
+                AI
+              </span>
+            </div>
+
+            {/* PARTICLES EFFECT */}
+            <div className="absolute inset-0 pointer-events-none">
+              <ParticlesBackground />
+            </div>
+
+            {/* GRADIENT MASKING */}
+            <div className="absolute inset-0 bg-gradient-to-b from-[#020617] via-transparent to-[#020617] pointer-events-none" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_#020617_90%)] pointer-events-none" />
+          </div>
+
+          {/* 2. HERO CONTENT */}
+          <div className="container mx-auto px-4 max-w-4xl relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <Badge variant="outline" className="mb-6 border-primary/40 text-primary uppercase tracking-[0.2em] py-2 px-6 bg-primary/10 backdrop-blur-md">
+                <Sparkles className="w-4 h-4 mr-2" /> Sectors We Transform
+              </Badge>
+              <h1 className="text-6xl md:text-8xl font-bold mb-8 tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-white to-white/40">
+                Our <span className="text-primary">Industries</span>
+              </h1>
+              <p className="text-xl text-white/50 max-w-2xl mx-auto leading-relaxed">
+                Select an industry to explore tailored AI solutions engineered for the enterprise.
+              </p>
+            </motion.div>
           </div>
         </section>
 
-        <section className="py-24 container mx-auto px-4 relative">
+        {/* 3. INDUSTRY GRID - SOLID BACKGROUND FOR CLARITY */}
+        <section className="py-24 container mx-auto px-4 relative bg-[#020617] z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {industryConfig.map((ind) => {
               const Icon = ind.icon;
