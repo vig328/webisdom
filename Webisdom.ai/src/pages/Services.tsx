@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -30,7 +31,7 @@ import ParticlesBackground from "@/components/visuals/ParticlesBackground";
 const Services = () => {
   const [isAuditDialogOpen, setIsAuditDialogOpen] = useState(false);
   const [isDemoDialogOpen, setIsDemoDialogOpen] = useState(false);
-  const [selectedBlog, setSelectedBlog] = useState(null); // Track full blog view
+  const [selectedBlog, setSelectedBlog] = useState(null); 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const section = searchParams.get("section");
@@ -68,7 +69,7 @@ const Services = () => {
       content: `
         <h3>From Chatbots to Semantic Partners</h3>
         <p>Natural Language Processing has moved beyond simple pattern matching. Modern Large Language Models (LLMs) are now capable of understanding complex legal jargon and emotional subtext.</p>
-
+        
         <h4>Strategic Use Cases:</h4>
         <ul>
           <li><strong>Automated Compliance:</strong> Scanning global trade news to instantly update internal shipping protocols.</li>
@@ -88,7 +89,7 @@ const Services = () => {
       content: `
         <h3>The Gift of Sight for Industry 4.0</h3>
         <p>Computer Vision (CV) is no longer just about recognizing faces. It's about 'Spatial Intelligence'—the ability for a machine to understand volume, heat, and velocity in a 3D space.</p>
-
+        
         <h4>Zero-Defect Manufacturing</h4>
         <p>Using high-speed cameras and edge-computing models, we can now detect micro-fractures in aerospace components that are invisible to the human eye. This happens at the speed of the assembly line, ensuring 100% quality assurance without slowing down production.</p>
 
@@ -173,26 +174,30 @@ const Services = () => {
   return (
     <div className="min-h-screen bg-[#020617] text-white selection:bg-primary/30 relative overflow-x-hidden">
       
-      {/* BACKGROUND LAYER */}
-      <div 
-        className="fixed inset-0 z-0 opacity-40 transition-opacity duration-700"
-        style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=2000&auto=format&fit=crop')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      />
-      <div className="fixed inset-0 z-0 bg-gradient-to-b from-[#020617]/90 via-[#020617]/60 to-[#020617]/90 pointer-events-none" />
-      <ParticlesBackground />
       <Header />
       
-      <main className="relative z-10">
-        {/* Hero Section */}
-        <section className="pt-48 pb-32 text-center relative overflow-hidden">
-          <div className="container mx-auto px-4 max-w-4xl relative">
+      <main className="relative">
+        {/* Hero Section - Particles Isolated Here */}
+        <section className="relative pt-48 pb-32 text-center overflow-hidden">
+          
+          {/* BACKGROUND WRAPPER (Traps Particles and Image) */}
+          <div className="absolute inset-0 z-0">
+            <div 
+              className="absolute inset-0 opacity-40 bg-center bg-cover"
+              style={{ backgroundImage: `url('https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=2000&auto=format&fit=crop')` }}
+            />
+            {/* Particles restricted to Hero height */}
+            <div className="absolute inset-0 pointer-events-none">
+              <ParticlesBackground />
+            </div>
+            {/* Overlay for Hero gradients */}
+            <div className="absolute inset-0 bg-gradient-to-b from-[#020617]/90 via-[#020617]/60 to-[#020617] pointer-events-none" />
+          </div>
+
+          <div className="container mx-auto px-4 max-w-4xl relative z-10">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
               <Badge variant="outline" className="mb-6 border-primary/30 text-primary uppercase tracking-[0.2em] py-2 px-6 bg-primary/10 backdrop-blur-md">
-                <Sparkles className="w-4 h-4 mr-2" /> Expertise & Innovation
+                <span className="flex items-center"><Sparkles className="w-4 h-4 mr-2" /> Expertise & Innovation</span>
               </Badge>
               <h1 className="text-6xl md:text-8xl font-bold mb-8 tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-white to-white/40">
                 Enterprise <span className="text-primary">AI Solutions</span>
@@ -212,8 +217,8 @@ const Services = () => {
           </div>
         </section>
 
-        {/* AI Audit Service Section */}
-        <section className="py-24 relative" id="ai-audit">
+        {/* AI Audit Service Section - Solid Background */}
+        <section className="py-24 relative bg-[#020617] z-10" id="ai-audit">
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">
               <Card className="bg-black/40 border-white/10 backdrop-blur-xl shadow-2xl overflow-hidden group">
@@ -263,8 +268,8 @@ const Services = () => {
           </div>
         </section>
 
-        {/* Neural Insights / Blog Section */}
-        <section className="py-24 relative" id="blog">
+        {/* Neural Insights / Blog Section - Solid Background */}
+        <section className="py-24 relative bg-[#020617] z-10" id="blog">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold tracking-tight mb-4 text-white">Latest Neural <span className="text-primary">Insights</span></h2>
@@ -276,7 +281,7 @@ const Services = () => {
                 <div
                   key={blog.id}
                   className="bg-black/40 border border-white/10 rounded-2xl shadow-xl hover:border-primary/30 transition-all duration-500 overflow-hidden group cursor-pointer backdrop-blur-md"
-                  onClick={() => setSelectedBlog(blog)} // This triggers the blog-detail view
+                  onClick={() => setSelectedBlog(blog)}
                 >
                   <div className="h-56 overflow-hidden relative">
                     <img src={blog.image} className="h-full w-full object-cover group-hover:scale-110 transition-all duration-700" alt={blog.title} />
@@ -295,23 +300,23 @@ const Services = () => {
           </div>
         </section>
 
-        {/* Standard Content Section (Lab Solutions) */}
-        <section className="py-32 relative bg-black/20" id="ai-lab-solutions">
+        {/* Standard Content Section (Lab Capabilities) */}
+        <section className="py-32 relative bg-black/20 z-10" id="ai-lab-solutions">
            <div className="container mx-auto px-4 text-center">
-              <h2 className="text-4xl font-bold mb-16">AI Lab <span className="text-primary">Capabilities</span></h2>
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-                {[
-                  { icon: Brain, title: "Custom Models" },
-                  { icon: Cpu, title: "Edge Deployment" },
-                  { icon: Eye, title: "Vision Systems" },
-                  { icon: TrendingUp, title: "Strategy Consulting" }
-                ].map((s, i) => (
-                  <Card key={i} className="bg-white/5 border-white/10 p-8 hover:border-primary/50 transition-all">
-                    <s.icon className="h-10 w-10 text-primary mx-auto mb-4" />
-                    <h3 className="font-bold text-white">{s.title}</h3>
-                  </Card>
-                ))}
-              </div>
+             <h2 className="text-4xl font-bold mb-16">AI Lab <span className="text-primary">Capabilities</span></h2>
+             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+               {[
+                 { icon: Brain, title: "Custom Models" },
+                 { icon: Cpu, title: "Edge Deployment" },
+                 { icon: Eye, title: "Vision Systems" },
+                 { icon: TrendingUp, title: "Strategy Consulting" }
+               ].map((s, i) => (
+                 <Card key={i} className="bg-white/5 border-white/10 p-8 hover:border-primary/50 transition-all">
+                   <s.icon className="h-10 w-10 text-primary mx-auto mb-4" />
+                   <h3 className="font-bold text-white">{s.title}</h3>
+                 </Card>
+               ))}
+             </div>
            </div>
         </section>
 
