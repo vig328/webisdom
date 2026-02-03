@@ -1,3 +1,4 @@
+"use client";
 import { useRef, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -67,12 +68,9 @@ const ProductShowcase = () => {
 
                 <CardContent className="p-6 md:p-8 flex flex-col justify-between h-full relative z-0">
                   <div className="mb-4">
-                    {/* Icon container */}
+                    {/* Icon container - Updated to show Sparkles icon for all products */}
                     <div className="h-12 w-12 rounded-lg bg-white/5 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors border border-white/5">
-                        {product.url.includes("github") ? 
-                            <Terminal className="h-6 w-6 text-primary" /> : 
-                            <Sparkles className="h-6 w-6 text-primary" />
-                        }
+                      <Sparkles className="h-6 w-6 text-primary" />
                     </div>
                     
                     <h3 className="text-xl md:text-2xl font-bold mb-1 text-white group-hover:text-primary transition-colors">
