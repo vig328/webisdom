@@ -107,41 +107,33 @@ const Products = () => {
   const [filter, setFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false); 
 
+  // Dynamically get unique categories for the dropdown
   const categories = ["All", ...new Set(products.map(p => p.category))];
-  const displayedCategories = filter === "All" 
-    ? [...new Set(products.map(p => p.category))] 
-    : [filter];
+
+  // Filter the full product list based on selection
+  const filteredProducts = products.filter(p => filter === "All" || p.category === filter);
 
   return (
     <div className="min-h-screen bg-[#020617] text-white selection:bg-primary/30 relative overflow-x-hidden">
       
-      {/* HEADER IS OUTSIDE MAIN TO OVERLAY PROPERLY */}
       <Header />
       
-      {/* VERTICAL GLOW LINE - GLOBAL POSITIONED */}
       <div className="fixed left-1/2 top-0 w-[1px] h-full bg-gradient-to-b from-transparent via-blue-500/40 to-transparent -translate-x-1/2 z-1 pointer-events-none" />
 
       <main className="relative">
         
-        {/* Hero Section - PARTICLES TRAPPED HERE */}
         <section className="relative pt-48 pb-32 text-center overflow-hidden min-h-[80vh] flex items-center justify-center">
-          
-          {/* 1. BACKGROUND LAYERS (TRAPPED) */}
           <div className="absolute inset-0 z-0">
-             {/* Dynamic Neural Network Image */}
              <div 
                 className="absolute inset-0 opacity-40 bg-center bg-cover"
                 style={{ backgroundImage: `url('https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=2000&auto=format&fit=crop')` }}
              />
-             {/* Particles Effect Only for Hero */}
              <div className="absolute inset-0 pointer-events-none">
                 <ParticlesBackground />
              </div>
-             {/* Overlays for Hero Readability */}
              <div className="absolute inset-0 bg-gradient-to-b from-[#020617]/80 via-transparent to-[#020617] pointer-events-none" />
           </div>
 
-          {/* 2. HERO CONTENT */}
           <div className="container mx-auto px-4 max-w-4xl relative z-10">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -173,7 +165,6 @@ const Products = () => {
           </div>
         </section>
 
-        {/* Catalog Section - PLAIN BACKGROUND (Dark Navy) */}
         <section className="py-24 relative bg-[#020617] z-10" id="product-tour">
           <div className="container mx-auto px-4">
             
@@ -185,22 +176,22 @@ const Products = () => {
                 </TabsList>
               </div>
 
-              <TabsContent value="products" className="space-y-32 outline-none">
+              <TabsContent value="products" className="space-y-24 outline-none">
                 
                 <ProductTour />
 
-                {/* Filter Bar */}
-                <div className="flex flex-col md:flex-row justify-between items-center gap-6 border border-white/10 py-10 bg-black/40 backdrop-blur-md px-8 rounded-2xl shadow-xl">
+                {/* Filter Header */}
+                <div className="flex flex-col md:flex-row justify-between items-center gap-6 border border-white/10 py-10 bg-black/40 backdrop-blur-md px-8 rounded-2xl shadow-xl mb-12">
                   <div>
                     <h2 className="text-3xl font-bold">System Catalog</h2>
-                    <p className="text-white/70 mt-1 font-medium italic">Filtering {products.length} active neural nodes...</p>
+                    <p className="text-white/70 mt-1 font-medium italic">Displaying {filteredProducts.length} active neural nodes...</p>
                   </div>
                   
                   <div className="relative w-full md:w-72">
                     <select
                       value={filter}
                       onChange={(e) => setFilter(e.target.value)}
-                      className="w-full bg-[#0f172a]/90 border border-white/10 text-white text-sm rounded-xl block p-4 pr-10 appearance-none backdrop-blur-md focus:ring-2 focus:ring-primary/50 outline-none"
+                      className="w-full bg-[#0f172a]/90 border border-white/10 text-white text-sm rounded-xl block p-4 pr-10 appearance-none backdrop-blur-md focus:ring-2 focus:ring-primary/50 outline-none cursor-pointer"
                     >
                       {categories.map((cat, idx) => (
                         <option key={idx} value={cat}>{cat === "All" ? "All Divisions" : cat}</option>
@@ -210,59 +201,45 @@ const Products = () => {
                   </div>
                 </div>
 
-                {/* Product Grid */}
-                <div className="space-y-32">
-                  {displayedCategories.map((category) => {
-                    const categoryProducts = products.filter(p => p.category === category);
-                    if (categoryProducts.length === 0) return null;
-
-                    return (
-                      <div key={category} className="space-y-12">
-                        <div className="flex items-center gap-6">
-                          <h2 className="text-4xl font-bold tracking-tight text-white drop-shadow-md">{category}</h2>
-                          <div className="h-[1px] flex-grow bg-gradient-to-r from-white/30 to-transparent"></div>
-                          <Badge className="bg-primary/30 text-primary border-primary/40 backdrop-blur-md px-4 py-1">{categoryProducts.length} Units</Badge>
+                {/* Main Product Grid - This fills all space automatically */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {filteredProducts.map((product) => (
+                    <Card 
+                      key={product.id}
+                      className="group relative bg-black/50 border-white/10 backdrop-blur-md hover:bg-black/70 hover:border-primary/30 transition-all duration-500 overflow-hidden shadow-lg flex flex-col"
+                    >
+                      <Link to={`/products/${product.id}`} className="flex flex-col h-full">
+                        <div className="relative h-64 overflow-hidden">
+                          <img
+                            src={product.image}
+                            alt={product.title}
+                            className="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent opacity-80"></div>
+                          <Badge className="absolute top-4 right-4 bg-primary text-white border-0 shadow-[0_0_10px_rgba(59,130,246,0.5)]">
+                            {product.status}
+                          </Badge>
                         </div>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                          {categoryProducts.map((product) => (
-                            <Card 
-                              key={product.id}
-                              className="group relative bg-black/50 border-white/10 backdrop-blur-md hover:bg-black/70 hover:border-primary/30 transition-all duration-500 overflow-hidden shadow-lg"
-                            >
-                              <Link to={`/products/${product.id}`}>
-                                <div className="relative h-64 overflow-hidden">
-                                  <img
-                                    src={product.image}
-                                    alt={product.title}
-                                    className="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
-                                  />
-                                  <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent opacity-80"></div>
-                                  <Badge className="absolute top-4 right-4 bg-primary text-white border-0 shadow-[0_0_10px_rgba(59,130,246,0.5)]">
-                                    {product.status}
-                                  </Badge>
-                                </div>
 
-                                <CardContent className="p-8">
-                                  <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-primary transition-colors">{product.title}</h3>
-                                  <p className="text-primary/80 text-sm font-semibold mb-4 uppercase tracking-wider">{product.subtitle}</p>
-                                  <p className="text-white/80 mb-8 text-sm leading-relaxed line-clamp-3">
-                                    {product.description}
-                                  </p>
-                                  <div className="pt-6 border-t border-white/10 flex justify-between items-center">
-                                    <span className="text-xs font-bold uppercase tracking-widest text-white/50 group-hover:text-white transition-colors">
-                                      System Architecture
-                                    </span>
-                                    <ChevronRight className="w-5 h-5 text-primary group-hover:translate-x-2 transition-transform" />
-                                  </div>
-                                </CardContent>
-                              </Link>
-                            </Card>
-                          ))}
-                        </div>
-                      </div>
-                    );
-                  })}
+                        <CardContent className="p-8 flex flex-col flex-grow">
+                          <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-primary transition-colors line-clamp-1">{product.title}</h3>
+                          <Badge variant="secondary" className="w-fit mb-4 bg-white/5 border-white/10 text-primary/80 text-[10px] uppercase tracking-widest px-2 py-0">
+                             {product.category}
+                          </Badge>
+                          <p className="text-primary/80 text-sm font-semibold mb-3 uppercase tracking-wider">{product.subtitle}</p>
+                          <p className="text-white/80 mb-8 text-sm leading-relaxed line-clamp-3 flex-grow">
+                            {product.description}
+                          </p>
+                          <div className="pt-6 border-t border-white/10 flex justify-between items-center mt-auto">
+                            <span className="text-xs font-bold uppercase tracking-widest text-white/50 group-hover:text-white transition-colors">
+                              System Architecture
+                            </span>
+                            <ChevronRight className="w-5 h-5 text-primary group-hover:translate-x-2 transition-transform" />
+                          </div>
+                        </CardContent>
+                      </Link>
+                    </Card>
+                  ))}
                 </div>
               </TabsContent>
 
@@ -273,7 +250,6 @@ const Products = () => {
           </div>
         </section>
 
-        {/* Call to Action */}
         <section className="py-32 relative overflow-hidden bg-[#020617]">
           <div className="container mx-auto px-4 relative z-10 text-center max-w-3xl">
             <h2 className="text-5xl font-bold mb-8 tracking-tighter drop-shadow-2xl">Ready to Deploy?</h2>
